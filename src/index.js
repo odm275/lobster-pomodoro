@@ -5,10 +5,13 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import store from './store';
+import  {BrowserRouter as Router } from 'react-router-dom';
 const WrappedApp = () => (
-  <Provider store={store}>
-    <App />
-  </Provider>
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
 );
 
 ReactDOM.render(<WrappedApp />, document.getElementById('root'));

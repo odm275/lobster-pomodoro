@@ -3,21 +3,14 @@ import Home from './containers/Home/Home';
 import Settings from './containers/Settings/Settings';
 import Graphics from './containers/Graphics/Graphics';
 
-import {
-    BrowserRouter as Router,
-    Route, 
-    Link,
-    Redirect,
-    Switch,
-  } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 const App = () => (
-    <Router>
-        <Home/>
-        <Route exact path ='/' render = {Home}/>
-        <Route path = '/settings' render = {Settings}/>
-        <Route path = '/graphics' render = {Graphics}/>
-    </Router>
+        <Switch>
+            <Route exact path ='/' component = {Home}/>
+            <Route path = '/settings' component = {Settings}/>
+            <Route path = '/graphics' component = {Graphics}/>
+        </Switch>
 );
 
 export default App;
