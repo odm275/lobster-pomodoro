@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+
 import './Home.css';
-import Settings from '../../containers/Settings';
-import Graphics from '../../components/Graphics/Graphics';
+import Navbar from '../../components/Navbar/Navbar';
 import ShortBreak from '../../components/Breaks/ShortBreak';
 import LongBreak from '../../components/Breaks/LongBreak';
 import Timer from '../../components/Timer/Timer';
@@ -18,13 +18,8 @@ class Home extends Component {
   render() {
     return (
       <div className="home">
-      {/*Glue containers
-       <Timer/>
-       <Settings/>
-       */}
        <RowRight>
-         <Graphics/>
-         <Settings/>
+        <Navbar/>
        </RowRight>
        <Row>
         <ShortBreak/>
@@ -42,5 +37,10 @@ class Home extends Component {
     );
   }
 }
+
+
+//  Glue containers
+//  <Timer/>
+//  <Settings/>
 
 export default Home;
