@@ -1,16 +1,28 @@
-import React from 'react';
-import Home from './containers/Home/Home';
-import Settings from './containers/Settings/Settings';
-import Graphics from './containers/Graphics/Graphics';
+import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
 
-import { Route, Switch } from 'react-router-dom';
+import Home from "./components/Home/Home";
+import Settings from "./components/Settings/Settings";
+import Graphics from "./components/Graphics/Graphics";
 
-const App = () => (
-        <Switch>
-            <Route exact path ='/' component = {Home}/>
-            <Route path = '/settings' component = {Settings}/>
-            <Route path = '/graphics' component = {Graphics}/>
-        </Switch>
-);
+import store from "./store";
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <title>Top Lobster Pomodoro</title>
+        <Provider store={store}>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/graphics" component={Graphics} />
+          </Switch>
+        </Provider>
+      </div>
+    );
+  }
+}
 
 export default App;

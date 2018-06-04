@@ -1,0 +1,9 @@
+.lobster-logo {
+  width: 1.8rem;
+}
+.home {
+  display: grid;
+  padding-left: 10%;
+  padding-right: 5%;
+  padding-left: 5%;
+}

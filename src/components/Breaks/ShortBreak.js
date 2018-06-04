@@ -1,10 +1,6 @@
-import React from 'react';
-import { Button } from 'semantic-ui-react';
+import React from "react";
+import { Button } from "semantic-ui-react";
 
-const ShortBreak = () => (
-    <Button color="blue" style={{width: '100%'}}>
-        Short Break
-    </Button>
-);
+const ShortBreak = () => <Button>Short Break</Button>;
 
 export default ShortBreak;
