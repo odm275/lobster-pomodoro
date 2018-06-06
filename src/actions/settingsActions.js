@@ -6,15 +6,17 @@ import {
 
 //  On App Load
 export const getSettings = () => dispatch => {
-  const data = localStorageGetItems();
+  const settings = localStorageGetItems();
   dispatch({
-    GET_SETTINGS,
-    payload: data
+    type: GET_SETTINGS,
+    payload: settings
   });
 };
 
 //  On Settings Submit
-export const setSettings = (settingsData, history) => dispatch => {
-  localStorageSetItems(settingsData);
+export const setSettings = (settings, history) => dispatch => {
+  console.log("heyHEYHEY BITCONNECT");
+  localStorageSetItems(settings);
+  dispatch(getSettings());
   history.push("/");
 };

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Form } from "semantic-ui-react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { getSettings, setSettings } from "../../actions/settingsActions";
 import PropTypes from "prop-types";
 
@@ -9,18 +9,22 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pomodoro: null,
-      shortBreak: null,
-      longBreak: null
+      pomodoro: "",
+      shortBreak: "",
+      longBreak: ""
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
-  componentDidMount() {
+  componentWillMount() {
+    this.props.getSettings();
+  }
+  componentWillReceiveProps(nextProps) {
+    const { pomodoro, shortBreak, longBreak } = nextProps.settings;
     this.setState({
-      pomodoro: this.props.settings.pomodoro,
-      shortBreak: this.props.settings.shortBreak,
-      longBreak: this.props.settings.longBreak
+      pomodoro,
+      shortBreak,
+      longBreak
     });
   }
   onChange(e) {
@@ -35,16 +39,16 @@ class Settings extends Component {
       shortBreak: this.state.shortBreak,
       longBreak: this.state.longBreak
     };
+    console.log(this.props.setSettings);
     this.props.setSettings(settings, this.props.history);
   }
   render() {
-    console.log(this.state);
     return (
       <Form>
         <Form.Field>
           <label>Pomodoro</label>
           <input
-            value={this.state.pomodoro || 0}
+            value={this.state.pomodoro}
             type="number"
             min={0}
             name="pomodoro"
@@ -54,7 +58,7 @@ class Settings extends Component {
         <Form.Field>
           <label>Short Break</label>
           <input
-            value={this.state.shortBreak || 0}
+            value={this.state.shortBreak}
             type="number"
             min={0}
             name="shortBreak"
@@ -64,16 +68,14 @@ class Settings extends Component {
         <Form.Field>
           <label>Long Break</label>
           <input
-            value={this.state.longBreak || 0}
+            value={this.state.longBreak}
             type="number"
             min={0}
             name="longBreak"
             onChange={this.onChange}
           />
         </Form.Field>
-        <Link to="/">
-          <Button color="blue">Save</Button>
-        </Link>
+        <Button color="blue">Save</Button>
         <Button color="red">Reset</Button>
       </Form>
     );
@@ -90,6 +92,7 @@ const mapStateToProps = state => ({
   settings: state.settings
 });
 
-export default connect(mapStateToProps, { getSettings, setSettings })(
-  withRouter(Settings)
-);
+export default connect(
+  mapStateToProps,
+  { getSettings, setSettings }
+)(withRouter(Settings));
