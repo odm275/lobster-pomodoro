@@ -1,0 +1,9 @@
+button {
+  width: 100%;
+}
+.time {
+  text-align: center;
+  font-size: 3.4rem;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}

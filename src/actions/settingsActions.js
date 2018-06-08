@@ -15,8 +15,9 @@ export const getSettings = () => dispatch => {
 
 //  On Settings Submit
 export const setSettings = (settings, history) => dispatch => {
-  console.log("heyHEYHEY BITCONNECT");
   localStorageSetItems(settings);
   dispatch(getSettings());
   history.push("/");
 };
+
+export const Timer = timeLength => dispatch => {};

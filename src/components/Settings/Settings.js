@@ -39,7 +39,6 @@ class Settings extends Component {
       shortBreak: this.state.shortBreak,
       longBreak: this.state.longBreak
     };
-    console.log(this.props.setSettings);
     this.props.setSettings(settings, this.props.history);
   }
   render() {
@@ -75,7 +74,9 @@ class Settings extends Component {
             onChange={this.onChange}
           />
         </Form.Field>
-        <Button color="blue">Save</Button>
+        <Button color="blue" type="submit" onClick={this.onSubmit}>
+          Save
+        </Button>
         <Button color="red">Reset</Button>
       </Form>
     );

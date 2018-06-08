@@ -2,11 +2,7 @@ import React, { Component } from "react";
 
 import "./Home.css";
 import Navbar from "../Navbar/Navbar";
-import ShortBreak from "../Breaks/ShortBreak";
-import LongBreak from "../Breaks/LongBreak";
-import Timer from "../Timer/Timer";
-import StartButton from "../Productive/StartButton";
-import ResetButton from "../Productive/ResetButton";
+import TimeButtons from "../Buttons/Buttons";
 import Footer from "../Footer";
 
 class Home extends Component {
@@ -14,11 +10,7 @@ class Home extends Component {
     return (
       <div className="home">
         <Navbar />
-        <ShortBreak />
-        <LongBreak />
-        <Timer />
-        <ResetButton />
-        <StartButton />
+        <TimeButtons />
         <Footer />
       </div>
     );
