@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import "./Home.css";
 import Navbar from "../Navbar/Navbar";
-import TimeButtons from "../Buttons/Buttons";
+import Timer from "../Timer/Timer";
 import Footer from "../Footer";
 
 class Home extends Component {
@@ -10,7 +10,7 @@ class Home extends Component {
     return (
       <div className="home">
         <Navbar />
-        <TimeButtons />
+        <Timer />
         <Footer />
       </div>
     );
