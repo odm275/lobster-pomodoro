@@ -19,5 +19,3 @@ export const setSettings = (settings, history) => dispatch => {
   dispatch(getSettings());
   history.push("/");
 };
-
-export const Timer = timeLength => dispatch => {};

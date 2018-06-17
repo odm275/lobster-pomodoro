@@ -1,33 +1,35 @@
 export function localStorageGetItems() {
   if (localStorage.length === 0) {
     // Set user as true in localstorage
-    console.log("defaultSettings!");
-    const defaultSettings = {
+    //  Default settings
+    const defaultems = {
       pomodoro: "25",
       shortBreak: "5",
-      longBreak: "10"
+      longBreak: "10",
+      pomodoroCount: 0,
+      shortBreakCount: 0,
+      longBreakCount: 0
     };
-    setDefaultSettings(defaultSettings);
-    return defaultSettings;
+    setDefaultItems(defaultems);
+    return defaultems;
   }
-  console.log("userSettings!");
-
-  const userSettings = getUserSettings();
-  return userSettings;
+  // Stablished user settings
+  const userItems = getUserItems();
+  return userItems;
 }
-export function localStorageSetItems(settings) {
-  for (const key of Object.keys(settings)) {
-    localStorage.setItem(key, settings[key]);
-  }
-}
-
-function setDefaultSettings(defaultSettings) {
-  for (const key of Object.keys(defaultSettings)) {
-    localStorage.setItem(key, defaultSettings[key]);
+export function localStorageSetItems(items) {
+  for (const key of Object.keys(items)) {
+    localStorage.setItem(key, items[key]);
   }
 }
 
-function getUserSettings() {
+function setDefaultItems(defaultItems) {
+  for (const key of Object.keys(defaultItems)) {
+    localStorage.setItem(key, defaultItems[key]);
+  }
+}
+
+function getUserItems() {
   //  Get settings from loca Storage.
   //  Turn into an object and return.
   return Object.keys(localStorage).reduce((obj, str) => {
