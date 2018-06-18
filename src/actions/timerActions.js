@@ -1,7 +1,15 @@
-//  Action once timer is done.
+// @desc Gets a string from the localStorage;
+// sets up an array depending on the string;
+// then addes a new Date();
+
 export const increaseCount = type => dispatch => {
-  //  type -> some type of counter
-  const currentCount = localStorage.getItem(type);
-  const newCount = parseInt(currentCount, 10) + 1;
-  localStorage.setItem(type, newCount);
+  const currentCounts = localStorage.getItem(type); //Be getting a string that's an array
+  let currentCountsArray;
+  if (!currentCounts) {
+    currentCountsArray = [];
+  } else {
+    currentCountsArray = currentCounts.split(",");
+  }
+  const newCounts = [...currentCountsArray, Date.now().toString()];
+  localStorage.setItem(type, newCounts.join());
 };

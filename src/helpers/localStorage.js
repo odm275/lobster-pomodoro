@@ -6,9 +6,9 @@ export function localStorageGetItems() {
       pomodoro: "25",
       shortBreak: "5",
       longBreak: "10",
-      pomodoroCount: 0,
-      shortBreakCount: 0,
-      longBreakCount: 0
+      pomodoroCount: "",
+      shortBreakCount: "",
+      longBreakCount: ""
     };
     setDefaultItems(defaultems);
     return defaultems;
