@@ -16,8 +16,10 @@ class Graphics extends Component {
   }
   componentWillReceiveProps(nextProps) {
     const dataFormat = localStorageToChart(nextProps.counts.pomodoroCount);
+    const data = dataFormat.map(
+      day => (Array.isArray(day) && day.length ? day.length : 0)
+    );
     const labels = generateLabels(dataFormat);
-    const data = dataFormat.map(day => day.length);
     this.getChartData(labels, data);
   }
   getChartData(labels, data) {
@@ -40,22 +42,6 @@ class Graphics extends Component {
     const timeRange = [
       {
         text: "Last 7 Days",
-        value: 1
-      },
-      {
-        text: "Last 2 Weeks",
-        value: 1
-      },
-      {
-        text: "Last Month",
-        value: 1
-      },
-      {
-        text: "",
-        value: 1
-      },
-      {
-        text: "1 Week",
         value: 1
       }
     ];
@@ -88,10 +74,54 @@ function localStorageToChart(str) {
   //plot: Arrays of arrays with each
   //pomodoro occurances from each equivalent day
   const dataFormat = arrangeData(toDates);
-  return dataFormat;
+  const fillDataFormat = fillInGaps(dataFormat);
+  return fillDataFormat;
 }
+function fillInGaps(dataFormat) {
+  const day = 24 * 60 * 60 * 1000;
+  let gap = [];
+  let dataFormatWGaps = [];
+
+  let countToFuture = (past, future, index) => {
+    if (past >= future) {
+      insertGaps(gap, index);
+      gap = [];
+      return;
+    }
+    gap.push(past);
+    countToFuture(past + day, future, index);
+  };
+
+  let insertGaps = (gap, index) => {
+    //  Put gaps inside our dataFormat array
+    if (gap.length > 0) {
+      //  gap is going be between index and index+1 in the dataFormat array.
+      const slice1 = dataFormat.slice(index, index + 1);
+      const slice2 = dataFormat.slice(index + 1, dataFormat.length);
+
+      dataFormatWGaps = slice1.concat(gap, slice2);
+    }
+  };
+
+  let generateGaps = () => {
+    dataFormat.forEach((val, index) => {
+      //If we're not out of bounds
+      if (index + 1 < dataFormat.length) {
+        countToFuture(
+          dataFormat[index][0].getTime(),
+          dataFormat[index + 1][0].getTime(),
+          index
+        );
+      }
+    });
+  };
+  generateGaps();
+
+  return dataFormatWGaps;
+}
+
 function generateLabels(data) {
-  var monthNames = [
+  const monthNames = [
     "January",
     "February",
     "March",
@@ -106,12 +136,21 @@ function generateLabels(data) {
     "December"
   ];
   return data.map(date => {
-    const day = date[0].getDay();
-    const monthIndex = date[0].getMonth();
-    const year = date[0].getFullYear();
+    if (Array.isArray(date) && date.length) {
+      const day = date[0].getDate();
+      const monthIndex = date[0].getMonth();
+      const year = date[0].getFullYear();
+      return `${day}-${monthNames[monthIndex]}-${year}`;
+    }
+
+    const dateObject = new Date(date);
+    const day = dateObject.getDate();
+    const monthIndex = dateObject.getMonth();
+    const year = dateObject.getFullYear();
     return `${day}-${monthNames[monthIndex]}-${year}`;
   });
 }
+
 function arrangeData(arr) {
   let result = [];
   let array = arr;
