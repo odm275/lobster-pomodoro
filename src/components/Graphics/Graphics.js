@@ -37,6 +37,10 @@ class Graphics extends Component {
       }
     });
   }
+  setRange(range) {
+    const rangeLabels = this.state.chartData.labels;
+    const rangeData = this.state.chartData.datasets.data;
+  }
 
   render() {
     const timeRange = [
@@ -78,28 +82,31 @@ function localStorageToChart(str) {
   return fillDataFormat;
 }
 function fillInGaps(dataFormat) {
-  const day = 24 * 60 * 60 * 1000;
+  const day = 1000 * 60 * 60 * 24;
   let gap = [];
   let dataFormatWGaps = [];
 
   let countToFuture = (past, future, index) => {
-    if (past >= future) {
+    if (sameDay(new Date(past), new Date(future))) {
       insertGaps(gap, index);
       gap = [];
       return;
     }
-    gap.push(past);
-    countToFuture(past + day, future, index);
+    past += day;
+    gap.push(past); //Right here ... Should we push past before adding to past?
+    countToFuture(past, future, index);
   };
 
   let insertGaps = (gap, index) => {
     //  Put gaps inside our dataFormat array
-    if (gap.length > 0) {
+    if (gap.length > 1) {
       //  gap is going be between index and index+1 in the dataFormat array.
-      const slice1 = dataFormat.slice(index, index + 1);
+      const slice1 = dataFormat.slice(0, index + 1);
       const slice2 = dataFormat.slice(index + 1, dataFormat.length);
-
-      dataFormatWGaps = slice1.concat(gap, slice2);
+      const gapMinusExtra = gap.slice(0, gap.length - 1);
+      dataFormatWGaps = slice1.concat(gapMinusExtra, slice2);
+    } else {
+      dataFormatWGaps = dataFormat;
     }
   };
 
@@ -116,7 +123,6 @@ function fillInGaps(dataFormat) {
     });
   };
   generateGaps();
-
   return dataFormatWGaps;
 }
 
