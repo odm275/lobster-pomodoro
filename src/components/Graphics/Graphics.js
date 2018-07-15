@@ -92,18 +92,39 @@ function arrangeData(arr) {
     }
     return acc;
   }, []);
-
   return datesByDay;
 }
 
 function fillInGaps(arr) {
-  const day = 1000 * 60 * 60 * 24;
-  console.log(arr);
-  const arrWGaps = arr.reduce((acc, d1) => {
-    const day = d1[0];
+  const arrayWithGaps = arr.reduce((acc, d, index, array) => {
+    if (index + 1 < array.length) {
+      acc.push(d, ...gap(d[0], array[index + 1][0]));
+      return acc;
+    }
+    return acc;
   }, []);
+  return arrayWithGaps;
+}
 
-  return arr;
+let gap = (d1, d2) => {
+  const differenceToDays = Math.floor((d2 - d1) / 1000 / 60 / 60 / 24) - 1;
+  const length = differenceToDays < 0 ? 0 : differenceToDays;
+
+  const createGap = Array(length)
+    .fill(d1)
+    .map((d1, index) => {
+      const indexPrime = index + 1;
+      //console.log(d1);
+      return addDays(d1, indexPrime);
+    });
+  return createGap;
+};
+// @desc Adds single day to Date Object. Takes into account light saving days, and more.
+
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
 }
 
 function generateLabels(data) {
