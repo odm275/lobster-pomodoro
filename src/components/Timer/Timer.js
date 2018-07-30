@@ -17,6 +17,12 @@ class Timer extends Component {
   componentDidMount() {
     this.props.getSettings();
   }
+  playAudio() {
+    let audio = new Audio(
+      "http://soundbible.com/mp3/Music_Box-Big_Daddy-1389738694.mp3"
+    );
+    audio.play();
+  }
   setTimer(time, type) {
     //  If there's already a timer running, stop it.
     if (this.t) {
@@ -33,6 +39,7 @@ class Timer extends Component {
       let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       if (distance < 0) {
+        this.playAudio();
         clearInterval(this.t);
         this.props.increaseCount(type);
         return;

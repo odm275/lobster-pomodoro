@@ -1,14 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Chart from "./Chart";
-import DropDownInput from "./DropdownInput";
+import { Dropdown } from "semantic-ui-react";
 import { getCounts } from "../../actions/timerActions";
+import moment from "moment";
+import {
+  arrangeData,
+  fillInGaps,
+  addDays
+} from "../../helpers/localStorageToChart";
 
 class Graphics extends Component {
   constructor(props) {
     super(props);
+    this.arrDates = null;
     this.state = {
-      chartData: {}
+      chartData: {},
+      value: 1
     };
     this.setRange = this.setRange.bind(this);
   }
@@ -16,14 +24,68 @@ class Graphics extends Component {
     this.props.getCounts();
   }
   componentWillReceiveProps(nextProps) {
-    const dataFormat = localStorageToChart(nextProps.counts.pomodoroCount);
+    const dateStrings = nextProps.counts.pomodoroCount;
+    this.arrDates = dateStrings
+      .split(",")
+      .map(date => new Date(parseInt(date, 10)));
+
+    this.setRange();
+  }
+
+  calculateDateMap(arrDates) {
+    const dataFormat = fillInGaps(arrangeData(arrDates));
+    if (dataFormat[dataFormat.length - 1].length > 1) {
+      dataFormat[dataFormat.length - 1].pop();
+    } else {
+      dataFormat[dataFormat.length - 1] = dataFormat[dataFormat.length - 1][0];
+    }
+
+    if (dataFormat[0].length > 1) {
+      dataFormat[0].pop();
+    } else {
+      dataFormat[0] = dataFormat[0][0];
+    }
+
     const data = dataFormat.map(
       day => (Array.isArray(day) && day.length ? day.length : 0)
     );
     const labels = generateLabels(dataFormat);
-    this.getChartData(labels, data);
+    return { data: data, labels: labels };
   }
-  getChartData(labels, data) {
+
+  setRange(e, { value } = 1) {
+    let upperRange;
+    let lowerRange;
+    const val = value || 1;
+    switch (val) {
+      case 2: // Current Week
+        lowerRange = moment()
+          .startOf("week")
+          .toDate();
+        upperRange = moment()
+          .endOf("week")
+          .toDate();
+        this.setPlot(upperRange, lowerRange, val);
+        break;
+      default:
+        // Last 7 Days
+        upperRange = new Date();
+        lowerRange = addDays(upperRange, -6);
+        this.setPlot(upperRange, lowerRange, val);
+        break;
+    }
+  }
+
+  setPlot(upperRange, lowerRange, value) {
+    const range = [...this.arrDates, upperRange, lowerRange]
+      .sort((a, b) => a - b)
+      .filter(date => date > lowerRange);
+
+    const { labels, data } = this.calculateDateMap(range);
+    this.plotChart(labels, data, value);
+  }
+
+  plotChart(labels, data, value) {
     this.setState({
       chartData: {
         labels: labels,
@@ -35,25 +97,25 @@ class Graphics extends Component {
             fill: false
           }
         ]
-      }
+      },
+      value: value
     });
-  }
-  setRange(range) {
-    const rangeLabels = this.state.chartData.labels;
-    const rangeData = this.state.chartData.datasets.data;
   }
 
   render() {
     const timeRange = [
-      {
-        text: "Last 7 Days",
-        value: 1
-      }
+      { key: 1, text: "Last 7 Days", value: 1 },
+      { key: 2, text: "Current Week", value: 2 }
     ];
     return (
       <div className="graphics">
         <h1>Lobster Stats</h1>
-        <DropDownInput range={timeRange} onClick={this.setRange} />
+        <Dropdown
+          fluid
+          options={timeRange}
+          onChange={this.setRange}
+          value={this.state.value}
+        />
         <Chart
           chartData={this.state.chartData}
           displayTitle="Lobster Count"
@@ -72,60 +134,6 @@ export default connect(
   mapStateToProps,
   { getCounts }
 )(Graphics);
-
-function localStorageToChart(str) {
-  // String -> Array of Dates
-  const arr = str.split(",");
-  const toDates = arr.map(date => new Date(parseInt(date, 10)));
-
-  return fillInGaps(arrangeData(toDates));
-}
-// @desc [d1,d2,...,dN] -> [[d1,d2],[d3], [d4,d5,d6,d7]...Dn]
-// Array of dates -> Arrays of arrays of dates of the same day.
-function arrangeData(arr) {
-  const datesByDay = arr.reduce((acc, d1) => {
-    const pomDayCount = arr.filter(d2 => sameDay(d1, d2));
-    const length = acc.length;
-    if (length === 0 || !acc[length - 1].includes(d1)) {
-      acc.push(pomDayCount);
-      return acc;
-    }
-    return acc;
-  }, []);
-  return datesByDay;
-}
-
-function fillInGaps(arr) {
-  const arrayWithGaps = arr.reduce((acc, d, index, array) => {
-    if (index + 1 < array.length) {
-      acc.push(d, ...gap(d[0], array[index + 1][0]));
-      return acc;
-    }
-    return acc;
-  }, []);
-  return arrayWithGaps;
-}
-
-let gap = (d1, d2) => {
-  const differenceToDays = Math.floor((d2 - d1) / 1000 / 60 / 60 / 24) - 1;
-  const length = differenceToDays < 0 ? 0 : differenceToDays;
-
-  const createGap = Array(length)
-    .fill(d1)
-    .map((d1, index) => {
-      const indexPrime = index + 1;
-      //console.log(d1);
-      return addDays(d1, indexPrime);
-    });
-  return createGap;
-};
-// @desc Adds single day to Date Object. Takes into account light saving days, and more.
-
-function addDays(date, days) {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-}
 
 function generateLabels(data) {
   const monthNames = [
@@ -156,12 +164,4 @@ function generateLabels(data) {
     const year = dateObject.getFullYear();
     return `${day}-${monthNames[monthIndex]}-${year}`;
   });
-}
-
-function sameDay(d1, d2) {
-  return (
-    d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate()
-  );
 }

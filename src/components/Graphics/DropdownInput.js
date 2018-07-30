@@ -7,7 +7,9 @@ const DropdownInput = props => (
       placeholder="Select a Range"
       fluid
       selection
-      options={props.range}
+      options={props.options}
+      onChange={props.onChange}
+      value={props.value}
     />
   </div>
 );
