@@ -1,8 +1,8 @@
 {
-  "name": "lobster-pomodoro",
+  "name": "lobsterpomodoro",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://odm275.github.io/lobster-pomodoro/",
+  "homepage": "https://odm275.github.io/lobsterpomodoro/",
   "dependencies": {
     "chart.js": "^2.7.2",
     "gh-pages": "^1.2.0",
