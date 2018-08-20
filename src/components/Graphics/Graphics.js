@@ -40,12 +40,6 @@ class Graphics extends Component {
       dataFormat[dataFormat.length - 1] = dataFormat[dataFormat.length - 1][0];
     }
 
-    if (dataFormat[0].length > 1) {
-      dataFormat[0].pop();
-    } else {
-      dataFormat[0] = dataFormat[0][0];
-    }
-
     const data = dataFormat.map(
       day => (Array.isArray(day) && day.length ? day.length : 0)
     );

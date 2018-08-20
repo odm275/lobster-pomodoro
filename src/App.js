@@ -11,7 +11,7 @@ import store from "./store";
 class App extends Component {
   render() {
     return (
-      <div>
+      <div className="App">
         <title>Top Lobster Pomodoro</title>
         <Provider store={store}>
           <Switch>

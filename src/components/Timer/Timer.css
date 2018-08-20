@@ -1,9 +1,13 @@
+.mainMenuContainer {
+  display: "flex";
+  flex-direction: column;
+  justify-content: space-between;
+}
 button {
   width: 100%;
 }
 .time {
   text-align: center;
-  font-size: 3.4rem;
-  padding-top: 1%;
-  padding-bottom: 1%;
+  font-size: 4.5rem;
+  margin: 3rem 0 3rem 0;
 }

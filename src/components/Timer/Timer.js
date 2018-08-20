@@ -62,7 +62,7 @@ class Timer extends Component {
     const { minutes, seconds } = this.state;
 
     return (
-      <div>
+      <div className="mainMenuContainer">
         <div>
           <Button
             name="shortBreak"
@@ -70,16 +70,16 @@ class Timer extends Component {
           >
             Short Break
           </Button>
+
+          <Button
+            name="longBreak"
+            onClick={this.setTimer.bind(this, longBreak, "longBreakCount")}
+          >
+            Long Break
+          </Button>
         </div>
-        <Button
-          name="longBreak"
-          onClick={this.setTimer.bind(this, longBreak, "longBreakCount")}
-        >
-          Long Break
-        </Button>
-        <div>
-          <p className="time">{`${minutes}:${seconds}`}</p>
-        </div>
+        <p className="time">{`${minutes}:${seconds}`}</p>
+
         <div>
           <Button
             name="pomodoro"
