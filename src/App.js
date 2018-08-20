@@ -14,13 +14,13 @@ class App extends Component {
       <div className="App">
         <title>Top Lobster Pomodoro</title>
         <Provider store={store}>
-          <Switch>
-            <BrowserRouter basename={"/lobster-pomodoro"}>
+          <BrowserRouter basename={"https://odm275.github.io/lobster-pomodoro"}>
+            <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/settings" component={Settings} />
               <Route path="/graphics" component={Graphics} />
-            </BrowserRouter>
-          </Switch>
+            </Switch>
+          </BrowserRouter>
         </Provider>
       </div>
     );
