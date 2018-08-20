@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import Home from "./components/Home/Home";
@@ -15,9 +15,11 @@ class App extends Component {
         <title>Top Lobster Pomodoro</title>
         <Provider store={store}>
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/settings" component={Settings} />
-            <Route path="/graphics" component={Graphics} />
+            <BrowserRouter basename={"/lobster-pomodoro"}>
+              <Route exact path="/" component={Home} />
+              <Route path="/settings" component={Settings} />
+              <Route path="/graphics" component={Graphics} />
+            </BrowserRouter>
           </Switch>
         </Provider>
       </div>
