@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import Home from "./components/Home/Home";
 import Settings from "./components/Settings/Settings";
 import Graphics from "./components/Graphics/Graphics";
+import NotFound from "./NotFound";
 
 import store from "./store";
 
@@ -19,6 +20,7 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route path="/settings" component={Settings} />
               <Route path="/graphics" component={Graphics} />
+              <Route path="" component={NotFound} />
             </Switch>
           </BrowserRouter>
         </Provider>
