@@ -14,7 +14,7 @@ class App extends Component {
       <div className="App">
         <title>Top Lobster Pomodoro</title>
         <Provider store={store}>
-          <BrowserRouter basename={"https://odm275.github.io/lobster-pomodoro"}>
+          <BrowserRouter basename={process.env.PUBLIC_URL || ""}>
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/settings" component={Settings} />

@@ -102,7 +102,12 @@ class Graphics extends Component {
       { key: 2, text: "Current Week", value: 2 }
     ];
     return (
-      <div className="graphics">
+      <div
+        className="graphics"
+        style={{
+          width: "90%"
+        }}
+      >
         <h1>Lobster Stats</h1>
         <Dropdown
           fluid
